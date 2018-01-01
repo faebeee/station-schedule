@@ -8,7 +8,7 @@ export default class TransportationAPIPlugin {
    * @param {Number} id
    */
   getStationboard(id) {
-    return Vue.http.get(`http://transport.opendata.ch/v1/stationboard?id=${id}`)
+    return Vue.http.get(`https://transport.opendata.ch/v1/stationboard?id=${id}`)
   }
 
   /**
@@ -16,7 +16,7 @@ export default class TransportationAPIPlugin {
    * @param query
    */
   search(query) {
-    return Vue.http.get(`http://transport.opendata.ch/v1/locations?query=${query}`);
+    return Vue.http.get(`https://transport.opendata.ch/v1/locations?query=${query}`);
   }
 
   /**
