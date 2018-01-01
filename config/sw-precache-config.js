@@ -5,6 +5,7 @@ module.exports = {
     'dist/static/js/**.js',
     'dist/fonts/**/*'
   ],
+  cacheId: 'stationschedule',
   stripPrefix: "dist",
   runtimeCaching: [
     {
