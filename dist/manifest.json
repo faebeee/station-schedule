@@ -1,5 +1,6 @@
 {
   "short_name": "StationSchedule",
+  "display": "standalone",
   "name": "Station Schedule Table",
   "icons": [
     {

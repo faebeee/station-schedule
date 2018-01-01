@@ -9,7 +9,7 @@
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js && npm run cache",
-    "cache": "./node_modules/.bin/sw-precache --config=./config/sw-precache-config.js --to=dist && mv ./service-worker.js ./dist/service-worker.js"
+    "cache": "./node_modules/.bin/sw-precache --config=./config/sw-precache-config.js --to=dist && mv ./service-worker.js ./dist/service-worker.js &&  mv ./manifest.json ./dist/manifest.json"
   },
   "dependencies": {
     "fetch": "^1.1.0",
