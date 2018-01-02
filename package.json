@@ -8,8 +8,9 @@
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
-    "build": "node build/build.js && npm run cache",
-    "cache": "./node_modules/.bin/sw-precache --config=./config/sw-precache-config.js --to=dist && mv ./service-worker.js ./dist/service-worker.js &&  cp ./manifest.json ./dist/manifest.json"
+    "build": "node build/build.js && npm run cache && npm run copy-files",
+    "cache": "./node_modules/.bin/sw-precache --config=./config/sw-precache-config.js --to=dist && mv ./service-worker.js ./dist/service-worker.js",
+    "copy-files":"cp ./.htaccess ./dist/.htaccess &&  cp ./manifest.json ./dist/manifest.json"
   },
   "dependencies": {
     "fetch": "^1.1.0",

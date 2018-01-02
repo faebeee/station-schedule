@@ -28,8 +28,10 @@ Vue.use(TransportationAPIPlugin);
 Vue.use(NotificationPlugin);
 
 Vue.config.productionTip = false;
+
 Vue.config.showTimeDiffTextRowCount = 3;
-Vue.config.notifyUserDiff = 6;
+Vue.config.notifyUserDiff = Vue.ls.get('notifyUserDiff') || 6;
+Vue.config.maxTableRows = Vue.ls.get('maxTableRows') || 10;
 Vue.config.updateInterval = 60000;
 
 
@@ -39,5 +41,5 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App },
+  components: {App},
 });

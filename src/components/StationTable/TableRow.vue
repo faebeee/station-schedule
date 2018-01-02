@@ -1,13 +1,13 @@
 <template>
   <tr :class="{'blue lighten-1 white-text' : trackingConnection === board.name}">
-    <td>
+    <td @click="track">
       {{ board.category }}
       {{ board.number }}
     </td>
-    <td>
+    <td @click="track">
       {{ board.to }}
     </td>
-    <td>
+    <td @click="track">
       <span v-if="index < showTimeDiffTextRowCount || trackingConnection === board.name"
             class="tooltipped"
             data-position="bottom"
@@ -33,11 +33,6 @@
       </a>
 
       <ul :id='stationId+index' class='dropdown-content'>
-        <li>
-          <span v-if="trackingConnection !== board.name" @click="track">Track</span>
-          <span v-if="trackingConnection === board.name" @click="untrack">Untrack</span>
-        </li>
-
         <li>
           <span @click="openDetails">Details</span>
         </li>
@@ -69,7 +64,7 @@
 
     data() {
       return {
-        notificationFired : false,
+        notificationFired: false,
         showTimeDiffTextRowCount: 5,
       }
     },
@@ -90,7 +85,7 @@
           return;
         }
 
-        const minutesDiff =  moment(this.board.stop.departure).diff(moment(), 'minutes');
+        const minutesDiff = moment(this.board.stop.departure).diff(moment(), 'minutes');
         if (minutesDiff < Vue.config.notifyUserDiff) {
           this.$notification.notify(`in ${minutesDiff} minutes - ${this.board.category} ${this.board.number}`, `Direction ${this.board.to}`);
           this.notificationFired = true;

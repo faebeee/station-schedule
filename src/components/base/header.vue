@@ -1,22 +1,24 @@
 <template>
   <nav>
     <div class="nav-wrapper blue lighten-1">
-      <a href="/" class="brand-logo center"><img src="static/img/android-icon-48x48.png"></a>
+      <router-link :to="{name:'main'}" class="brand-logo center">
+        <img src="static/img/android-icon-192x192.png" height="64">
+      </router-link>
       <a href="#" data-activates="mobile-demo" class="button-collapse">
         <i class="material-icons">menu</i>
       </a>
       <ul class="right hide-on-med-and-down">
         <li>
-          <a href="/">
+          <router-link :to="{name : 'setting'}">
             <i class="material-icons">settings</i>
-          </a>
+          </router-link>
         </li>
       </ul>
       <ul class="side-nav" id="mobile-demo">
         <li>
-          <a href="/">
+          <router-link :to="{name : 'setting'}">
             <i class="material-icons">settings</i> Settings
-          </a>
+          </router-link>
         </li>
       </ul>
     </div>

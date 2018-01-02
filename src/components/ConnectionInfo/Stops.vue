@@ -42,7 +42,7 @@
     computed: {
       passList() {
         let stops = this.stops;
-        stops.splice(0, 1)
+        stops.splice(0, 1);
         return stops;
       }
     }

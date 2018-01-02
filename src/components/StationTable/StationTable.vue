@@ -57,7 +57,7 @@
 
     computed: {
       stationsLeaves() {
-        return this.stationboard.slice(0, 10);
+        return this.stationboard.slice(0, Vue.config.maxTableRows);
       }
     },
 
