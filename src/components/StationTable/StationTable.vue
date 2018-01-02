@@ -1,35 +1,34 @@
 <template>
   <div class="row">
     <div class="col s12">
-      <loading-indicator v-if="!station"></loading-indicator>
-
-      <div class="card" v-if="station">
+      <div class="card">
         <div class="card-content">
-          <span class="card-title">{{ station.name }}</span>
+          <span class="card-title" v-if="station">{{ station.name }}</span>
+          <loading-indicator v-if="!station"></loading-indicator>
 
-          <table class="striped">
+          <table class="responsive-table striped" v-if="station">
             <thead>
-            <tr>
-              <th>Line</th>
-              <th>Destination</th>
-              <th>Departure</th>
-              <th>Platform</th>
-              <th></th>
-            </tr>
+              <tr>
+                <th>Line</th>
+                <th>Destination</th>
+                <th>Departure</th>
+                <th>Platform</th>
+                <th></th>
+              </tr>
             </thead>
 
             <tbody>
-            <TableRow v-for="(board, index) in stationsLeaves"
-                      :board="board"
-                      :trackingConnection="trackingConnection"
-                      :index="index"
-                      :stationId="stationId"
-                      @track="trackConnection"></TableRow>
+              <TableRow v-for="(board, index) in stationsLeaves"
+                        :board="board"
+                        :trackingConnection="trackingConnection"
+                        :index="index"
+                        :stationId="stationId"
+                        @track="trackConnection"></TableRow>
             </tbody>
           </table>
         </div>
-        <div class="card-action">
-          <button class="btn red" @click="remove">
+        <div class="card-action" v-if="station">
+          <button class="btn-flat red-text" @click="remove">
             <i class="material-icons">delete</i>
           </button>
         </div>

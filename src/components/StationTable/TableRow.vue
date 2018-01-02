@@ -1,5 +1,5 @@
 <template>
-  <tr :class="{'red white-text' : trackingConnection === board.name}">
+  <tr :class="{'blue lighten-1 white-text' : trackingConnection === board.name}">
     <td>
       {{ board.category }}
       {{ board.number }}
@@ -8,7 +8,11 @@
       {{ board.to }}
     </td>
     <td>
-      <span v-if="index < showTimeDiffTextRowCount || trackingConnection === board.name">
+      <span v-if="index < showTimeDiffTextRowCount || trackingConnection === board.name"
+            class="tooltipped"
+            data-position="bottom"
+            data-delay="50"
+            :data-tooltip="getTime(board.stop.departure)">
         {{ getDiffTime(board.stop.departure) }}
       </span>
 
@@ -20,18 +24,24 @@
       {{ board.stop.platform }}
     </td>
     <td>
-      <a ref="dropdown" class='dropdown-button btn-flat' href='#' :data-activates='stationId+index'>
+      <a ref="dropdown"
+         class='dropdown-button btn-default'
+         :class="{'white-text' : trackingConnection === board.name}"
+         href='#'
+         :data-activates='stationId+index'>
         <i class="material-icons">more_vert</i>
       </a>
 
       <ul :id='stationId+index' class='dropdown-content'>
-        <li v-if="trackingConnection !== board.name">
-          <span @click="track">Track</span>
+        <li>
+          <span v-if="trackingConnection !== board.name" @click="track">Track</span>
+          <span v-if="trackingConnection === board.name" @click="untrack">Untrack</span>
         </li>
 
-        <li v-if="trackingConnection === board.name">
-          <span @click="untrack">Untrack</span>
+        <li>
+          <span @click="openDetails">Details</span>
         </li>
+
       </ul>
     </td>
   </tr>
@@ -41,6 +51,7 @@
   import Vue from 'vue';
   import moment from 'moment';
 
+  import TimeMixin from '@/mixins/TimeMixin';
 
   export default {
     props: {
@@ -49,19 +60,21 @@
       index: Number,
       stationId: [Number, String],
     },
+    mixins: [TimeMixin],
     watch: {
       board() {
-        console.log('update');
         this.checkIfUserHasToBeNotified();
       }
     },
 
     data() {
       return {
+        notificationFired : false,
         showTimeDiffTextRowCount: 5,
       }
     },
     mounted() {
+      $('.tooltipped').tooltip();
       this.showTimeDiffTextRowCount = Vue.config.showTimeDiffTextRowCount;
       $(this.$refs.dropdown).dropdown({
           inDuration: 300,
@@ -73,12 +86,14 @@
     methods: {
 
       checkIfUserHasToBeNotified() {
-        if (this.trackingConnection !== this.board.name) {
+        if (this.trackingConnection !== this.board.name || this.notificationFired) {
           return;
         }
 
-        if (moment().diff(this.board.stop.departure, 'minutes') > Vue.config.notifyUserDiff) {
-          this.$notification.notify(`${this.board.stop.station.name}`, `${this.board.category} ${this.board.number} direction ${this.board.to}`);
+        const minutesDiff =  moment(this.board.stop.departure).diff(moment(), 'minutes');
+        if (minutesDiff < Vue.config.notifyUserDiff) {
+          this.$notification.notify(`in ${minutesDiff} minutes - ${this.board.category} ${this.board.number}`, `Direction ${this.board.to}`);
+          this.notificationFired = true;
         }
       },
 
@@ -90,13 +105,11 @@
         this.$emit('track', null);
       },
 
-      getDiffTime(t) {
-        return moment.duration(moment().diff(t, 'minutes'), 'minutes').humanize(false);
+      openDetails() {
+        this.$store.commit('connection/set', this.board);
+        this.$store.dispatch('connection/openModal');
       },
 
-      getTime(t) {
-        return moment(t).format('H:mm');
-      }
     }
   }
 </script>

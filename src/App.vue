@@ -1,9 +1,15 @@
 <template>
   <div id="app">
+    <HeaderComponent></HeaderComponent>
     <router-view/>
   </div>
 </template>
 
 <script>
-  export default {};
+  import HeaderComponent from '@/components/base/header.vue';
+  export default {
+    components : {
+      HeaderComponent
+    },
+  };
 </script>
