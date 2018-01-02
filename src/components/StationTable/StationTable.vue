@@ -1,9 +1,12 @@
 <template>
-  <div class="row" v-if="station">
+  <div class="row">
     <div class="col s12">
-      <div class="card">
+      <loading-indicator v-if="!station"></loading-indicator>
+
+      <div class="card" v-if="station">
         <div class="card-content">
           <span class="card-title">{{ station.name }}</span>
+
           <table class="striped">
             <thead>
             <tr>
@@ -11,18 +14,17 @@
               <th>Destination</th>
               <th>Departure</th>
               <th>Platform</th>
+              <th></th>
             </tr>
             </thead>
 
             <tbody>
-            <tr v-for="board in stationsLeaves">
-              <td>{{ board.category }}
-                {{ board.number }}
-              </td>
-              <td>{{ board.to }}</td>
-              <td>{{ getTime(board.stop.departure) }}</td>
-              <td>{{ board.stop.platform }}</td>
-            </tr>
+            <TableRow v-for="(board, index) in stationsLeaves"
+                      :board="board"
+                      :trackingConnection="trackingConnection"
+                      :index="index"
+                      :stationId="stationId"
+                      @track="trackConnection"></TableRow>
             </tbody>
           </table>
         </div>
@@ -38,42 +40,63 @@
 
 <script>
 
-  import moment from 'moment';
-  import MdCardContent from 'vue-material/src/components/mdCard/mdCardContent';
-  import mdCard from 'vue-material/src/components/mdCard/mdCard';
-  import mdCardHeader from 'vue-material/src/components/mdCard/mdCardHeader';
+  import Vue from 'vue';
+
+  import TableRow from './TableRow.vue';
 
   export default {
-    components: {MdCardContent, mdCard, mdCardHeader},
+    components: {
+      TableRow
+    },
+
     props: {
       stationId: {
         type: [Number, String],
         required: true,
       },
     },
+
     computed: {
       stationsLeaves() {
         return this.stationboard.slice(0, 10);
       }
     },
+
     data() {
       return {
+        trackingConnection: null,
         station: null,
         stationboard: null,
         interval: null,
       }
     },
+
     mounted() {
       this.load();
     },
+
     beforeDestroy() {
       clearTimeout(this.interval);
     },
+
     methods: {
+      trackConnection(name) {
+        if (name === this.trackingConnection) {
+          this.trackingConnection = null;
+        } else {
+          this.trackingConnection = name;
+        }
+
+        this.$ls.set('track_' + this.stationId, this.trackingConnection);
+      },
+
       remove() {
         this.$store.commit('stations/remove', this.stationId);
       },
+
       load() {
+        this.trackingConnection = this.$ls.get('track_' + this.stationId);
+
         this.$transportation.getStationboard(this.stationId)
           .then(data => {
             this.station = data.body.station;
@@ -82,12 +105,8 @@
 
         this.interval = setTimeout(() => {
           this.load();
-        }, 60000);
+        }, Vue.config.updateInterval);
       },
-      getTime(t) {
-        //return moment().diff(t, 'minutes');
-        return moment.duration(moment().diff(t, 'minutes'), 'minutes').humanize(false);
-      }
     }
   };
 </script>
