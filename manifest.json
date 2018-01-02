@@ -1,0 +1,23 @@
+{
+  "short_name": "StationSchedule",
+  "display": "standalone",
+  "name": "Station Schedule Table",
+  "icons": [
+    {
+      "src": "static/img/mipmap-hdpi/launcher-icon.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "static/img/mipmap-xhdpi/launcher-icon.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "static/img/mipmap-xxxhdpi/launcher-icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "index.html"
+}
